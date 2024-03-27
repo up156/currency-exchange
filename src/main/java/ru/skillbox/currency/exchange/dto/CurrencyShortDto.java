@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CurrencyReplyDto {
-    List<CurrencyShortDto> currencies;
+public class CurrencyShortDto {
+    private String name;
+
+    private Double value;
 }

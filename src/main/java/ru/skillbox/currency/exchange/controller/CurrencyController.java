@@ -7,8 +7,6 @@ import ru.skillbox.currency.exchange.dto.CurrencyDto;
 import ru.skillbox.currency.exchange.dto.CurrencyReplyDto;
 import ru.skillbox.currency.exchange.service.CurrencyService;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/currency")
@@ -21,7 +19,7 @@ public class CurrencyController {
     }
 
     @GetMapping
-    ResponseEntity<List<CurrencyReplyDto>> getAll() {
+    ResponseEntity<CurrencyReplyDto> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 

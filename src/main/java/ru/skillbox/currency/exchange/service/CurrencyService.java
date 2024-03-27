@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.skillbox.currency.exchange.dto.CurrencyDto;
 import ru.skillbox.currency.exchange.dto.CurrencyReplyDto;
+import ru.skillbox.currency.exchange.dto.CurrencyShortDto;
 import ru.skillbox.currency.exchange.entity.Currency;
 import ru.skillbox.currency.exchange.mapper.CurrencyMapper;
 import ru.skillbox.currency.exchange.repository.CurrencyRepository;
@@ -25,10 +26,13 @@ public class CurrencyService {
         return mapper.convertToDto(currency);
     }
 
-    public List<CurrencyReplyDto> getAll() {
+    public CurrencyReplyDto getAll() {
         log.info("CurrencyService method getAll executed");
-        List<Currency> list = repository.findAll();
-        return list.stream().map(mapper::convertToReplyDto).collect(Collectors.toList());
+        List<CurrencyShortDto> list = repository.findAll()
+                .stream()
+                .map(mapper::convertToShortDto)
+                .collect(Collectors.toList());
+        return new CurrencyReplyDto(list);
     }
 
     public Double convertValue(Long value, Long numCode) {
