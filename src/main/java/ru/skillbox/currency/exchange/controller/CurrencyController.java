@@ -8,7 +8,7 @@ import ru.skillbox.currency.exchange.service.CurrencyService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/currency")
+@RequestMapping("/api/currency")
 public class CurrencyController {
     private final CurrencyService service;
 
