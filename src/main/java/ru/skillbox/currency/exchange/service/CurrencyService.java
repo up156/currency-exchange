@@ -4,9 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.skillbox.currency.exchange.dto.CurrencyDto;
+import ru.skillbox.currency.exchange.dto.CurrencyReplyDto;
 import ru.skillbox.currency.exchange.entity.Currency;
 import ru.skillbox.currency.exchange.mapper.CurrencyMapper;
 import ru.skillbox.currency.exchange.repository.CurrencyRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -19,6 +23,12 @@ public class CurrencyService {
         log.info("CurrencyService method getById executed");
         Currency currency = repository.findById(id).orElseThrow(() -> new RuntimeException("Currency not found with id: " + id));
         return mapper.convertToDto(currency);
+    }
+
+    public List<CurrencyReplyDto> getAll() {
+        log.info("CurrencyService method getAll executed");
+        List<Currency> list = repository.findAll();
+        return list.stream().map(mapper::convertToReplyDto).collect(Collectors.toList());
     }
 
     public Double convertValue(Long value, Long numCode) {
