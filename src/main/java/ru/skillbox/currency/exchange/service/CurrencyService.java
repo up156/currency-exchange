@@ -51,7 +51,7 @@ public class CurrencyService {
     }
 
     @Scheduled(cron = "@hourly")
-    @Scheduled(cron = "*/10 * * * * *")
+//    @Scheduled(cron = "*/10 * * * * *")
     private void updateCurrenciesInDB() {
         log.info("CurrencyService method updateCurrencies executed");
         List<Currency> list = cbrfClient.getCurrencies().getCurrencies();

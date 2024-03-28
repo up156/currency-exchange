@@ -62,9 +62,18 @@ curl --request GET \
   --url http://localhost:8080/api/currency/1333
 ```
 
+Получение Всех валют из БД
+
+```bash
+curl --request GET \
+  --url http://localhost:8080/api/currency
+```
+
 Конвертация валюты по числовому коду
 
 ```bash
 curl --request GET \
 --url http://localhost:8080/api/currency/convert?value=100&numCode=840
 ```
+
+В программе реализовано обновление данных о курсах валют в БД с API ЦБ РФ раз в час.
