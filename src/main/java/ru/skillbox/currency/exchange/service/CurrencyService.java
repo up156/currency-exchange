@@ -2,7 +2,9 @@ package ru.skillbox.currency.exchange.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import ru.skillbox.currency.exchange.client.CBRFClient;
 import ru.skillbox.currency.exchange.dto.CurrencyDto;
 import ru.skillbox.currency.exchange.dto.CurrencyReplyDto;
 import ru.skillbox.currency.exchange.dto.CurrencyShortDto;
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
 public class CurrencyService {
     private final CurrencyMapper mapper;
     private final CurrencyRepository repository;
+
+    private final CBRFClient cbrfClient;
 
     public CurrencyDto getById(Long id) {
         log.info("CurrencyService method getById executed");
@@ -43,6 +47,27 @@ public class CurrencyService {
 
     public CurrencyDto create(CurrencyDto dto) {
         log.info("CurrencyService method create executed");
-        return  mapper.convertToDto(repository.save(mapper.convertToEntity(dto)));
+        return mapper.convertToDto(repository.save(mapper.convertToEntity(dto)));
     }
+
+    @Scheduled(cron = "@hourly")
+    @Scheduled(cron = "*/10 * * * * *")
+    private void updateCurrenciesInDB() {
+        log.info("CurrencyService method updateCurrencies executed");
+        List<Currency> list = cbrfClient.getCurrencies().getCurrencies();
+        list.forEach(this::updateCurrency);
+    }
+
+
+    private void updateCurrency(Currency currency) {
+        log.info("CurrencyService method updateCurrency executed for Currency: {}", currency);
+        Currency currencyForUpdate = repository.findByIsoLetterCode(currency.getIsoLetterCode());
+        if (currencyForUpdate == null) {
+            create(mapper.convertToDto(currency));
+            return;
+        }
+        currencyForUpdate.setValue(currency.getValue());
+        repository.save(currencyForUpdate);
+    }
+
 }
